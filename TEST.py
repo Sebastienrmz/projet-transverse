@@ -6,6 +6,9 @@ def calcul(x):
         if 0
 
 
+            yfytydytrktiutfèt
+
+
 
 
 
