@@ -3,9 +3,8 @@ print("fffff")
 def calcul(x):
     x = 0
     for i in range(x):
-        if
-
-
+        if 0
+print("test_Hasan3")
 
 
 
