@@ -5,9 +5,9 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 def start_game(player1_name, player2_name):
-    level = 1  # Tu peux ajouter un menu de difficulté plus tard
-    score1_total = 0
-    score2_total = 0
+        level = 1  # Tu peux ajouter un menu de difficulté plus tard
+        score1_total = 0
+        score2_total = 0
 
     for round_number in range(1, 4):  # 3 manches
         print(f"Manche {round_number} : {player1_name} joue")
