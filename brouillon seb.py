@@ -20,8 +20,8 @@ pygame.mixer.init()
 pygame.mixer.music.load("welcome-to-arena-sport-hip-hop-207257.mp3")  # Mets ton fichier audio ici
 pygame.mixer.music.set_volume(0.5)
 
-# Charger l’image de fond et autres images
-# Images d’arrière-plan
+#Charger l’image de fond et autres images
+#Images d’arrière-plann
 background_menu = pygame.image.load("cartoon-background-of-street-basketball-vector-22899763.jpg")
 background_menu = pygame.transform.scale(background_menu, (800, 600))
 
