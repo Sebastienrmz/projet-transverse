@@ -10,7 +10,6 @@ def start_game(player1, player2, difficulty):
 
 
 
-
 def show_score_graph(scores1, scores2, player1_name, player2_name):
     bar_width = 100
     spacing = 60
