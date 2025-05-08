@@ -6,13 +6,6 @@ import math
 # Initialisation de Pygame
 pygame.init()
 
-try:
-    orbitron_big = pygame.font.Font("Orbitron.ttf", 72)
-    orbitron_small = pygame.font.Font("Orbitron.ttf", 30)
-except Exception as e:
-    print("Erreur de chargement de la police Orbitron :", e)
-    pygame.quit()
-    sys.exit()
 
 
 
