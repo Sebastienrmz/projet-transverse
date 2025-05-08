@@ -45,11 +45,11 @@ basket_image = pygame.transform.scale(basket_image, (80, 60))
 # Couleurs
 ecran_largeur = 800
 ecran_hauteur = 800
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+BLANC = (255, 255, 255)
+NOIR = (0, 0, 0)
 VERT = (0, 255, 0)
-GRAY = (100, 100, 100)
-LIGHT_GREEN = (144, 238, 144)  # Couleur plus claire pour le survol
+GRIS = (100, 100, 100)
+VERT_CLAIR = (144, 238, 144)  # Couleur plus claire pour le survol
 ROUGE = (255, 0, 0)
 ORANGE = (255, 165, 0)
 BLEU = (0, 0, 255)
@@ -95,7 +95,7 @@ buttons = {
 }
 
 
-def enter_names():
+def entrer_noms():
     """Permet aux joueurs d'entrer leur nom."""
     font_small = pygame.font.Font(font_path, 30)
     player1_name = ""
@@ -116,12 +116,12 @@ def enter_names():
     done = False
 
     while not done:
-        screen.fill(WHITE)
+        screen.fill(BLANC)
         screen.blit(background_menu, (0, 0))
 
         # Affichage des champs
-        text_surface1 = font_small.render(f"Joueur 1 : {player1_name}", True, BLACK)
-        text_surface2 = font_small.render(f"Joueur 2 : {player2_name}", True, BLACK)
+        text_surface1 = font_small.render(f"Joueur 1 : {player1_name}", True, NOIR)
+        text_surface2 = font_small.render(f"Joueur 2 : {player2_name}", True, NOIR)
         screen.blit(text_surface1, (input_box1.x + 10, input_box1.y + 10))
         screen.blit(text_surface2, (input_box2.x + 10, input_box2.y + 10))
 
@@ -162,7 +162,7 @@ def enter_names():
         if player1_name and player2_name:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             hovered = start_button.collidepoint(mouse_x, mouse_y)
-            draw_button("Démarrer", start_button, hovered, font )
+            bouton("Démarrer", start_button, hovered, font )
 
         pygame.display.flip()
         clock.tick(30)
@@ -175,13 +175,13 @@ def animation_titre_progressif():
     clock = pygame.time.Clock()
 
     # Afficher l'écran noir
-    screen.fill(BLACK)
+    screen.fill(NOIR)
     pygame.display.flip()
 
     # Animation du titre lettre par lettre
     for i, char in enumerate(title_text):
         displayed += char
-        color = VERT if i % 2 == 0 else WHITE  # Alterne les couleurs
+        color = VERT if i % 2 == 0 else BLANC  # Alterne les couleurs
         zoom_factor = 1 + (i * 0.1)  # Zoom progressif (commence petit et grandit)
 
         # Crée l'effet de zoom pour chaque lettre
@@ -193,7 +193,7 @@ def animation_titre_progressif():
         x_pos = WIDTH // 2 - scaled_surface.get_width() // 2
         y_pos = HEIGHT // 2 - scaled_surface.get_height() // 2
 
-        screen.fill(BLACK)  # L'écran noir
+        screen.fill(NOIR)  # L'écran noir
         screen.blit(scaled_surface, (x_pos, y_pos))  # Afficher le titre avec le zoom
         pygame.display.flip()
 
@@ -226,38 +226,38 @@ def transition():
 
     # Transition des carrés
     for square in squares:
-        screen.fill(BLACK)
-        pygame.draw.rect(screen, WHITE, square)  # Dessiner chaque carré en blanc
+        screen.fill(NOIR)
+        pygame.draw.rect(screen, BLANC, square)  # Dessiner chaque carré en blanc
         pygame.display.flip()
         pygame.time.delay(10)  # Lente transition
         pygame.time.delay(10)  # Remplacé pygame.time.wait par pygame.time.delay
 
 
 
-def draw_button(text, rect, is_hovered, font):
+def bouton(text, rect, is_hovered, font):
     """Dessiner un bouton avec survol et texte."""
-    button_color = LIGHT_GREEN if is_hovered else VERT
-    border_color = WHITE
+    button_color = VERT_CLAIR if is_hovered else VERT
+    border_color = BLANC
 
     pygame.draw.rect(screen, button_color, rect, border_radius=15)
     pygame.draw.rect(screen, border_color, rect, 5, border_radius=15)
 
-    text_surface = font.render(text, True, BLACK)
+    text_surface = font.render(text, True, NOIR)
     text_rect = text_surface.get_rect(center=rect.center)
     screen.blit(text_surface, text_rect)
 
 
 
-def draw_ball(x, y):
+def ballon(x, y):
     pygame.draw.circle(WIN, ORANGE, (int(x), int(y)), BALL_RADIUS)
-    pygame.draw.circle(WIN, BLACK, (int(x), int(y)), BALL_RADIUS, 2)
+    pygame.draw.circle(WIN, NOIR, (int(x), int(y)), BALL_RADIUS, 2)
 
-def draw_hoop():
+def panier():
     pygame.draw.rect(screen, (255, 0, 0), (HOOP_X, HOOP_Y, HOOP_WIDTH, HOOP_HEIGHT))
 
 
 
-def adjust_hoop_size():
+def ajuster_taille_panier():
     global HOOP_WIDTH, HOOP_X
 
     if difficulty == "Facile":
@@ -268,7 +268,7 @@ def adjust_hoop_size():
         HOOP_WIDTH = 100  # Normal, mais on fera déplacer le panier
 
 
-def move_hoop():
+def mouvement_panier():
     global HOOP_X, HOOP_SPEED
 
     if difficulty == "Difficile":
@@ -296,17 +296,17 @@ def options_menu():
         screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 50))
 
         # Volume
-        music_text = orbitron_small.render("Volume Musique :", True, WHITE)
+        music_text = orbitron_small.render("Volume Musique :", True, BLANC)
         screen.blit(music_text, (100, 150))
 
-        pygame.draw.rect(screen, WHITE, volume_slider)
+        pygame.draw.rect(screen, BLANC, volume_slider)
         volume = pygame.mixer.music.get_volume()
         pygame.draw.rect(screen, VERT, (volume_slider.x, volume_slider.y, int(volume * volume_slider.width), volume_slider.height))
         handle_x = volume_slider.x + int(volume * volume_slider.width)
-        pygame.draw.circle(screen, BLACK, (handle_x, volume_slider.y + volume_slider.height // 2), 10)
+        pygame.draw.circle(screen, NOIR, (handle_x, volume_slider.y + volume_slider.height // 2), 10)
 
         # Difficulté
-        draw_text("Difficulté :", orbitron_medium, WHITE, screen, 100, 200)
+        dessin_texte("Difficulté :", orbitron_medium, BLANC, screen, 100, 200)
 
         easy_button = pygame.Rect(115, 265, 110, 50)
         medium_button = pygame.Rect(225, 265, 110, 50)
@@ -316,13 +316,13 @@ def options_menu():
         pygame.draw.rect(screen, (255, 165, 0), medium_button)
         pygame.draw.rect(screen, (200, 0, 0), hard_button)
 
-        draw_text("Facile", orbitron_small, BLACK, screen, 115, 265)
-        draw_text("Moyen", orbitron_small, BLACK, screen, 225, 265)
-        draw_text("Difficile", orbitron_small, BLACK, screen, 335, 265)
+        dessin_texte("Facile", orbitron_small, NOIR, screen, 115, 265)
+        dessin_texte("Moyen", orbitron_small, NOIR, screen, 225, 265)
+        dessin_texte("Difficile", orbitron_small, NOIR, screen, 335, 265)
 
-        draw_text(f"Difficulté actuelle : {difficulty}", orbitron_small, WHITE, screen, 100, 320)
+        dessin_texte(f"Difficulté actuelle : {difficulty}", orbitron_small, BLANC, screen, 100, 320)
 
-        draw_button("Retour", back_button, back_button.collidepoint(*pygame.mouse.get_pos()), orbitron_small)
+        bouton("Retour", back_button, back_button.collidepoint(*pygame.mouse.get_pos()), orbitron_small)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -357,23 +357,23 @@ def options_menu():
 
 
 
-def draw_text(text, font, color, surface, x, y):
+def dessin_texte(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-def start_game(player1_name, player2_name):
+def commencer_la_partie(player1_name, player2_name):
     level = 1  # Tu peux ajouter un menu de difficulté plus tard
     score1_total = 0
     score2_total = 0
 
     for round_number in range(1, 4):  # 3 manches
         print(f"Manche {round_number} : {player1_name} joue")
-        score1, _ = play_round(level, player1_name, player2_name, round_number)
+        score1, _ = jeu(level, player1_name, player2_name, round_number)
 
         print(f"Manche {round_number} : {player2_name} joue")
-        score2, _ = play_round(level, player2_name, player1_name, round_number)
+        score2, _ = jeu(level, player2_name, player1_name, round_number)
 
         score1_total += score1
         score2_total += score2
@@ -395,14 +395,14 @@ def start_game(player1_name, player2_name):
     print(f"Gagnant : {winner}")
 
 
-def draw_centered_text(text, font, color, y):
+def dessin_texte_centre(text, font, color, y):
     rendered = font.render(text, True, color)
     rect = rendered.get_rect(center=(WIDTH // 2, y))
     screen.blit(rendered, rect)
 
 
 
-def show_round(round_number, player_name):
+def round(round_number, player_name):
     # Charger la police Orbitron
     orbitron_big = pygame.font.Font("Orbitron.ttf", 72)
     orbitron_countdown = pygame.font.Font("Orbitron.ttf", 100)
@@ -443,7 +443,7 @@ def show_round(round_number, player_name):
 
 
 
-def show_end_screen(player1, player2, score1, score2):
+def ecran_de_fin(player1, player2, score1, score2):
     # Charger l'image de fond
     background_img = pygame.image.load("image_victoire.jpg").convert()
     background_img = pygame.transform.scale(background_img, (ecran_hauteur, ecran_largeur))
@@ -452,9 +452,9 @@ def show_end_screen(player1, player2, score1, score2):
     screen.blit(background_img, (0, 0))
 
     # Afficher les textes par-dessus l'image
-    draw_centered_text("Fin du Jeu", orbitron_big, WHITE, 80)
-    draw_centered_text(f"{player1}: {score1} pts", orbitron_medium, VERT, 200)
-    draw_centered_text(f"{player2}: {score2} pts", orbitron_medium, VERT, 260)
+    dessin_texte_centre("Fin du Jeu", orbitron_big, BLANC, 80)
+    dessin_texte_centre(f"{player1}: {score1} pts", orbitron_medium, VERT, 200)
+    dessin_texte_centre(f"{player2}: {score2} pts", orbitron_medium, VERT, 260)
 
     if score1 > score2:
         winner = f"Gagnant: {player1}"
@@ -463,8 +463,8 @@ def show_end_screen(player1, player2, score1, score2):
     else:
         winner = "Match nul !"
 
-    draw_centered_text(winner, orbitron_medium, ROUGE, 350)
-    draw_centered_text("Cliquez pour retourner au menu", orbitron_small, WHITE, 500)
+    dessin_texte_centre(winner, orbitron_medium, ROUGE, 350)
+    dessin_texte_centre("Cliquez pour retourner au menu", orbitron_small, BLANC, 500)
     pygame.display.flip()
 
     waiting = True
@@ -479,7 +479,7 @@ def show_end_screen(player1, player2, score1, score2):
 
 
 
-def get_difficulty_margin():
+def choix_difficulté():
     if difficulty == "easy":
         return 40
     elif difficulty == "medium":
@@ -493,9 +493,9 @@ orbitron_font_large = pygame.font.Font("Orbitron.ttf", 72)
 
 
 
-def play_round(player_name, round_number, difficulty):
+def jeu(player_name, round_number, difficulty):
     # Animation de la manche avec texte grandissant
-    show_round(round_number, player_name)
+    round(round_number, player_name)
 
     # Pause avant le début de la manche
     time.sleep(1)
@@ -587,13 +587,13 @@ def play_round(player_name, round_number, difficulty):
             remaining = max(0, int(30 - elapsed))
 
             # Affichage du score et timer avec Orbitron
-            timer_text = orbitron_font_small.render(f"Temps: {remaining}s", True, WHITE)
+            timer_text = orbitron_font_small.render(f"Temps: {remaining}s", True, BLANC)
             score_text = orbitron_font_small.render(f"{player_name} Score: {score}", True, VERT)
             screen.blit(timer_text, (10, 10))
             screen.blit(score_text, (10, 50))
 
         else:
-            pause_text = orbitron_font_large.render("PAUSE", True, WHITE)
+            pause_text = orbitron_font_large.render("PAUSE", True, BLANC)
             screen.blit(pause_text, (WIDTH // 2 - 100, HEIGHT // 2))
 
         pygame.display.flip()
@@ -602,19 +602,19 @@ def play_round(player_name, round_number, difficulty):
     return score
 
 
-def start_game(player1, player2, difficulty):
+def commencer_la_partie(player1, player2, difficulty):
     total1 = 0
     total2 = 0
 
     for i in range(1, 4):
-        total1 += play_round(player1, i, difficulty)
-        total2 += play_round(player2, i, difficulty)
+        total1 += jeu(player1, i, difficulty)
+        total2 += jeu(player2, i, difficulty)
 
-    show_end_screen(player1, player2, total1, total2)
+    ecran_de_fin(player1, player2, total1, total2)
 
 
 
-def show_score_graph(scores1, scores2, player1_name, player2_name):
+def graphique_des_scores(scores1, scores2, player1_name, player2_name):
     bar_width = 100
     spacing = 60
     max_score = max(max(scores1), max(scores2), 1)  # éviter division par 0
@@ -636,7 +636,7 @@ def show_score_graph(scores1, scores2, player1_name, player2_name):
         pygame.draw.rect(screen, (255, 100, 100), bar2)
 
         # N° de manche
-        label = orbitron_small.render(f"Manche {i + 1}", True, WHITE)
+        label = orbitron_small.render(f"Manche {i + 1}", True, BLANC)
         screen.blit(label, (bar1.x + 10, 420))
 
     # Légendes
@@ -656,7 +656,7 @@ difficulty = "Facile"
 
 
 
-def draw_menu():
+def menu():
     screen.blit(background_menu, (0, 0))  # Affiche l’image de fond
 
     # Titre du jeu avec Orbitron
@@ -667,7 +667,7 @@ def draw_menu():
     for text, rect in buttons.items():
         mouse_x, mouse_y = pygame.mouse.get_pos()
         is_hovered = rect.collidepoint(mouse_x, mouse_y)
-        draw_button(text, rect, is_hovered, orbitron_medium)
+        bouton(text, rect, is_hovered, orbitron_medium)
 
     pygame.display.flip()
 
@@ -687,10 +687,10 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
                 if buttons["Jouer"].collidepoint(x, y):
-                    player1_name, player2_name = enter_names()
+                    player1_name, player2_name = entrer_noms()
                     print(f"Joueur 1 : {player1_name}")
                     print(f"Joueur 2 : {player2_name}")
-                    start_game(player1_name, player2_name, difficulty)
+                    commencer_la_partie(player1_name, player2_name, difficulty)
 
                 elif buttons["Options"].collidepoint(x, y):
                     options_menu()
@@ -699,7 +699,7 @@ def main():
                     pygame.quit()
                     sys.exit()
 
-        draw_menu()
+        menu()
         pygame.time.delay(30)
 
 
@@ -710,6 +710,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 
 
 
