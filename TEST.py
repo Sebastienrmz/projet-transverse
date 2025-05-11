@@ -9,7 +9,7 @@ pygame.init()
 
 
 
-
+#Permet de lancer la musique
 pygame.mixer.init()
 pygame.mixer.music.load("welcome-to-arena-sport-hip-hop-207257.mp3")
 pygame.mixer.music.set_volume(0.5)
@@ -23,7 +23,7 @@ background_game = pygame.image.load("background_projet-transversre-Copie.jpg")
 background_game = pygame.transform.scale(background_game, (800, 600))
 
 
-
+#Permet de charger la police
 orbitron_big = pygame.font.Font("Orbitron.ttf", 70)
 orbitron_medium = pygame.font.Font("Orbitron.ttf", 40)
 orbitron_small = pygame.font.Font("Orbitron.ttf", 30)
@@ -158,7 +158,7 @@ def entrer_noms():
                     elif len(player2_name) < 20:
                         player2_name += event.unicode
 
-        # Affichage du bouton démarrer uniquement si les 2 noms sont saisis
+        #Permet l'affichage du bouton démarrer uniquement si les 2 noms sont saisis
         if player1_name and player2_name:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             hovered = start_button.collidepoint(mouse_x, mouse_y)
@@ -356,13 +356,13 @@ def options_menu():
 
 
 
-
+#Permet d'afficher du texte à une position précise sur l'écran
 def dessin_texte(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
-
+#Permet de lancer le jeu en 3 manches où chaque joueur joue à tour de rôle
 def commencer_la_partie(player1_name, player2_name):
     level = 1 
     score1_total = 0
@@ -394,7 +394,7 @@ def commencer_la_partie(player1_name, player2_name):
     print(f"{player2_name} : {score2_total} points")
     print(f"Gagnant : {winner}")
 
-
+#Permet d'afficher du texte centré et à une certaine hauteur
 def dessin_texte_centre(text, font, color, y):
     rendered = font.render(text, True, color)
     rect = rendered.get_rect(center=(WIDTH // 2, y))
@@ -442,7 +442,7 @@ def round(round_number, player_name):
 
 
 
-#Affiche un écran à la fin du jeu avec le gagnant et les scores
+#Affiche un écran à la fin du jeu
 def ecran_de_fin(player1, player2, score1, score2):
     
     background_img = pygame.image.load("image_victoire.jpg").convert()
@@ -478,7 +478,7 @@ def ecran_de_fin(player1, player2, score1, score2):
 
 
 
-
+#Permet de retourner une valeur numérique en fonction du choix de la difficulté
 def choix_difficulté():
     if difficulty == "easy":
         return 40
@@ -655,7 +655,7 @@ def graphique_des_scores(scores1, scores2, player1_name, player2_name):
 difficulty = "Facile"
 
 
-
+#Permet d'afficher le menu principal du jeu à l'écran, avec le titre et les boutons
 def menu():
     screen.blit(background_menu, (0, 0))  
 
@@ -671,7 +671,7 @@ def menu():
 
     pygame.display.flip()
 
-
+#Fonction principale qui permet de gérer la boucle d'exécution du jeu et réagit au clic de l'utilisateur
 def main():
     global difficulty
     difficulty = "facile"  # difficulté par défaut
