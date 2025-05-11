@@ -32,7 +32,7 @@ def menu():
                 if zone_jouer.collidepoint(event.pos):
                     print("→ Lancement du jeu !")
                 elif zone_options.collidepoint(event.pos):
-                    print("→ Menu des options")
+                    print("→ Menu des options ")
                 elif zone_quitter.collidepoint(event.pos):
                     pygame.quit()
                     sys.exit()
