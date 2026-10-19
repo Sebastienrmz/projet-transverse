@@ -3,6 +3,12 @@ import sys
 import time
 import random
 import math
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+
+def asset(name):
+    return str(BASE_DIR / name)
 # Initialisation de Pygame
 pygame.init()
 
@@ -11,22 +17,22 @@ pygame.init()
 
 #Permet de lancer la musique
 pygame.mixer.init()
-pygame.mixer.music.load("welcome-to-arena-sport-hip-hop-207257.mp3")
+pygame.mixer.music.load(asset("welcome-to-arena-sport-hip-hop-207257.mp3"))
 pygame.mixer.music.set_volume(0.5)
 
 
 
-background_menu = pygame.image.load("cartoon-background-of-street-basketball-vector-22899763.jpg")
+background_menu = pygame.image.load(asset("cartoon-background-of-street-basketball-vector-22899763.jpg"))
 background_menu = pygame.transform.scale(background_menu, (800, 600))
 
-background_game = pygame.image.load("background_projet-transversre-Copie.jpg")  
+background_game = pygame.image.load(asset("background_projet-transversre-Copie.jpg"))  
 background_game = pygame.transform.scale(background_game, (800, 600))
 
 
 #Permet de charger la police
-orbitron_big = pygame.font.Font("Orbitron.ttf", 70)
-orbitron_medium = pygame.font.Font("Orbitron.ttf", 40)
-orbitron_small = pygame.font.Font("Orbitron.ttf", 30)
+orbitron_big = pygame.font.Font(asset("Orbitron.ttf"), 70)
+orbitron_medium = pygame.font.Font(asset("Orbitron.ttf"), 40)
+orbitron_small = pygame.font.Font(asset("Orbitron.ttf"), 30)
 
 
 difficulty="Facile"
@@ -35,8 +41,8 @@ WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
-ball_image = pygame.image.load("0pw3xgm2-modified.jpg").convert_alpha()
-basket_image = pygame.image.load("79qqv6dt.jpg").convert_alpha()
+ball_image = pygame.image.load(asset("0pw3xgm2-modified.jpg")).convert_alpha()
+basket_image = pygame.image.load(asset("79qqv6dt.jpg")).convert_alpha()
 
 
 ball_image = pygame.transform.scale(ball_image, (40, 40))
@@ -80,7 +86,7 @@ pygame.display.set_caption("Basket Game - Menu")
 
 
 
-font_path = "StreetartDemoItalic.ttf"  
+font_path = asset("STREET.ttf")  
 font = pygame.font.Font(font_path, 50)  
 font_large = pygame.font.Font(font_path, 60)
 font_medium = pygame.font.Font(font_path, 40)
@@ -143,23 +149,23 @@ def entrer_noms():
                     active_input = 2
                     color1 = color_inactive
                     color2 = color_active
-                elif start_button.collidepoint(event.pos) and player1_name and player2_name:
-                    return player1_name, player2_name
+                elif start_button.collidepoint(event.pos) and player1_name.strip() and player2_name.strip():
+                    return player1_name.strip(), player2_name.strip()
 
             elif event.type == pygame.KEYDOWN:
                 if active_input == 1:
                     if event.key == pygame.K_BACKSPACE:
                         player1_name = player1_name[:-1]
-                    elif len(player1_name) < 20:
+                    elif event.unicode.isprintable() and len(player1_name) < 20:
                         player1_name += event.unicode
                 elif active_input == 2:
                     if event.key == pygame.K_BACKSPACE:
                         player2_name = player2_name[:-1]
-                    elif len(player2_name) < 20:
+                    elif event.unicode.isprintable() and len(player2_name) < 20:
                         player2_name += event.unicode
 
         #Permet l'affichage du bouton démarrer uniquement si les 2 noms sont saisis
-        if player1_name and player2_name:
+        if player1_name.strip() and player2_name.strip():
             mouse_x, mouse_y = pygame.mouse.get_pos()
             hovered = start_button.collidepoint(mouse_x, mouse_y)
             bouton("Démarrer", start_button, hovered, font )
@@ -277,7 +283,7 @@ def mouvement_panier():
         if HOOP_X < 0 or HOOP_X + HOOP_WIDTH > WIDTH:
             HOOP_SPEED = -HOOP_SPEED 
 
-background_options = pygame.image.load("background_option_menu_projet_transverse.png").convert()
+background_options = pygame.image.load(asset("background_option_menu_projet_transverse.png")).convert()
 background_options = pygame.transform.scale(background_options, (WIDTH, HEIGHT))
 #Permet d'afficher les différentes options dans le menu du jeu(choix du volume de la musique et de la difficulté du jeu
 def options_menu():
@@ -363,37 +369,6 @@ def dessin_texte(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 #Permet de lancer le jeu en 3 manches où chaque joueur joue à tour de rôle
-def commencer_la_partie(player1_name, player2_name):
-    level = 1 
-    score1_total = 0
-    score2_total = 0
-
-    for round_number in range(1, 4):  # 3 manches
-        print(f"Manche {round_number} : {player1_name} joue")
-        score1, _ = jeu(level, player1_name, player2_name, round_number)
-
-        print(f"Manche {round_number} : {player2_name} joue")
-        score2, _ = jeu(level, player2_name, player1_name, round_number)
-
-        score1_total += score1
-        score2_total += score2
-
-        print(f"Résultat de la manche {round_number} :")
-        print(f"{player1_name} : {score1} points | {player2_name} : {score2} points")
-
-    # Résultat final
-    if score1_total > score2_total:
-        winner = player1_name
-    elif score2_total > score1_total:
-        winner = player2_name
-    else:
-        winner = "Égalité"
-
-    print("Fin du jeu !")
-    print(f"{player1_name} : {score1_total} points")
-    print(f"{player2_name} : {score2_total} points")
-    print(f"Gagnant : {winner}")
-
 #Permet d'afficher du texte centré et à une certaine hauteur
 def dessin_texte_centre(text, font, color, y):
     rendered = font.render(text, True, color)
@@ -404,10 +379,10 @@ def dessin_texte_centre(text, font, color, y):
 #permet d'ajouter une animation être chaque manche avec un compteur
 def round(round_number, player_name):
     # Charger la police Orbitron
-    orbitron_big = pygame.font.Font("Orbitron.ttf", 72)
-    orbitron_countdown = pygame.font.Font("Orbitron.ttf", 100)
+    orbitron_big = pygame.font.Font(asset("Orbitron.ttf"), 72)
+    orbitron_countdown = pygame.font.Font(asset("Orbitron.ttf"), 100)
 
-    background = pygame.image.load("image_manche.jpg")  
+    background = pygame.image.load(asset("image_manche.jpg"))  
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
     
@@ -445,7 +420,7 @@ def round(round_number, player_name):
 #Affiche un écran à la fin du jeu
 def ecran_de_fin(player1, player2, score1, score2):
     
-    background_img = pygame.image.load("image_victoire.jpg").convert()
+    background_img = pygame.image.load(asset("image_victoire.jpg")).convert()
     background_img = pygame.transform.scale(background_img, (ecran_hauteur, ecran_largeur))
 
     
@@ -475,6 +450,7 @@ def ecran_de_fin(player1, player2, score1, score2):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 waiting = False
+        clock.tick(60)
 
 
 
@@ -487,9 +463,9 @@ def choix_difficulté():
     elif difficulty == "hard":
         return 10
 
-difficulty= "facile" #par défaut
-orbitron_font_small = pygame.font.Font("Orbitron.ttf", 30)
-orbitron_font_large = pygame.font.Font("Orbitron.ttf", 72)
+difficulty= "Facile" #par défaut
+orbitron_font_small = pygame.font.Font(asset("Orbitron.ttf"), 30)
+orbitron_font_large = pygame.font.Font(asset("Orbitron.ttf"), 72)
 
 
 #Permet de lancer le jeu et d'y jouer
@@ -532,7 +508,7 @@ def jeu(player_name, round_number, difficulty):
     score = 0  
 
     
-    while time.time() - start_time - total_pause_duration < 30:
+    while paused or time.time() - start_time - total_pause_duration < 30:
         screen.blit(background_game, (0, 0))
 
         for event in pygame.event.get():
@@ -674,7 +650,7 @@ def menu():
 #Fonction principale qui permet de gérer la boucle d'exécution du jeu et réagit au clic de l'utilisateur
 def main():
     global difficulty
-    difficulty = "facile"  # difficulté par défaut
+    difficulty = "Facile"  # difficulté par défaut
 
     animation_titre_progressif()
     running = True
@@ -710,13 +686,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
