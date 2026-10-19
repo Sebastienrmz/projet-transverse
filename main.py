@@ -19,11 +19,13 @@ def attendre(milliseconds):
             sys.exit()
         pygame.time.wait(min(16, max(1, fin - pygame.time.get_ticks())))
 
-def texte_adapte(text, font, color):
+def texte_adapte(text, font, color, largeur=None):
+    if largeur is None:
+        largeur = WIDTH - 40
     surface = font.render(text, True, color)
-    if surface.get_width() > WIDTH - 40:
-        ratio = (WIDTH - 40) / surface.get_width()
-        surface = pygame.transform.smoothscale(surface, (WIDTH - 40, max(1, int(surface.get_height() * ratio))))
+    if surface.get_width() > largeur:
+        ratio = largeur / surface.get_width()
+        surface = pygame.transform.smoothscale(surface, (largeur, max(1, int(surface.get_height() * ratio))))
     return surface
 
 # Initialisation de Pygame
@@ -137,8 +139,8 @@ def entrer_noms():
         pygame.draw.rect(screen, BLANC, input_box2)
 
         # Affichage des champs
-        text_surface1 = font_small.render(f"Joueur 1 : {player1_name}", True, NOIR)
-        text_surface2 = font_small.render(f"Joueur 2 : {player2_name}", True, NOIR)
+        text_surface1 = texte_adapte(f"Joueur 1 : {player1_name}", font_small, NOIR, input_box1.width - 20)
+        text_surface2 = texte_adapte(f"Joueur 2 : {player2_name}", font_small, NOIR, input_box2.width - 20)
         screen.blit(text_surface1, (input_box1.x + 10, input_box1.y + 10))
         screen.blit(text_surface2, (input_box2.x + 10, input_box2.y + 10))
 
@@ -555,7 +557,7 @@ def jeu(player_name, round_number, difficulty):
             remaining = max(0, int(30 - elapsed))
 
             timer_text = orbitron_font_small.render(f"Temps: {remaining}s", True, BLANC)
-            score_text = orbitron_font_small.render(f"{player_name} Score: {score}", True, VERT)
+            score_text = texte_adapte(f"{player_name} Score: {score}", orbitron_font_small, VERT)
             screen.blit(timer_text, (10, 10))
             screen.blit(score_text, (10, 50))
 
