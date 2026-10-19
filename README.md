@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-Conserver les images, les polices et la musique fournies à côté des scripts. Le jeu nécessite une interface graphique et un périphérique audio disponible pour la musique.
+Conserver le dossier `assets/` à côté de `main.py` : il contient les images, les polices et la musique utilisées par le jeu. Le jeu nécessite une interface graphique et un périphérique audio disponible pour la musique.
 
 ## Commandes
 
@@ -29,9 +29,17 @@ Conserver les images, les polices et la musique fournies à côté des scripts. 
 
 ## Organisation
 
-`main.py` lance la version intégrée située dans `TEST.py`. Ce nom historique est conservé pour éviter de déplacer tout le code. Ce fichier contient le menu, les options, les animations, les manches et l'écran de fin.
+```text
+projet-transverse/
+├── main.py
+├── assets/
+│   ├── images, polices et musique du jeu
+├── requirements.txt
+├── README.md
+└── .gitignore
+```
 
-`Menu.py`, `hasan.py`, `animationHasan.py`, `code_jeu.py` et `brouillon seb.py` sont des essais ou des parties de travail conservés dans le dépôt. Ils ne sont pas les points d'entrée du jeu et certains ne fonctionnent pas seuls.
+`main.py` contient le menu, les options, les animations, les manches et l'écran de fin. Les anciens scripts d'essai et les ressources non utilisées ont été retirés de la version courante ; ils restent consultables dans l'historique Git.
 
 ## Répartition du travail
 
