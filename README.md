@@ -17,7 +17,7 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-Conserver le dossier `assets/` à côté de `main.py` : il contient les images, les polices et la musique utilisées par le jeu. Le jeu nécessite une interface graphique et un périphérique audio disponible pour la musique.
+Conserver le dossier `assets/` à côté de `main.py` : il contient les images, les polices et la musique utilisées par le jeu. Le jeu nécessite une interface graphique. Si aucun périphérique audio n’est disponible, il démarre sans musique.
 
 ## Commandes
 
@@ -33,7 +33,6 @@ Conserver le dossier `assets/` à côté de `main.py` : il contient les images, 
 projet-transverse/
 ├── main.py
 ├── assets/
-│   ├── images, polices et musique du jeu
 ├── requirements.txt
 ├── README.md
 └── .gitignore
@@ -55,4 +54,4 @@ Cette répartition reprend la présentation initiale de l'équipe.
 
 Les trajectoires utilisent une vitesse et une gravité mises à jour à chaque image. Le score repose sur une collision avec la zone du panier. Le mode difficile déplace le panier et change la position de départ de la balle.
 
-Le projet reste un jeu de cours : les collisions sont simples, certaines animations attendent avec `pygame.time.delay`, et les scores ne sont pas enregistrés entre deux parties. Les corrections de démarrage conservent le déroulement et les visuels d'origine : chemin des ressources, police présente dans le dépôt, difficulté cohérente et chronomètre pendant la pause.
+Le projet reste un jeu de cours : les collisions sont simples, les animations utilisent des pauses courtes qui laissent la fenêtre répondre, et les scores ne sont pas enregistrés entre deux parties. Les corrections de démarrage conservent le déroulement et les visuels d'origine : chemin des ressources, police présente dans le dépôt, difficulté cohérente et chronomètre pendant la pause.

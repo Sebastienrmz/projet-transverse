@@ -9,18 +9,35 @@ BASE_DIR = Path(__file__).resolve().parent / "assets"
 
 def asset(name):
     return str(BASE_DIR / name)
+
+def attendre(milliseconds):
+    """Laisser la fenetre repondre pendant les animations."""
+    fin = pygame.time.get_ticks() + milliseconds
+    while pygame.time.get_ticks() < fin:
+        for event in pygame.event.get(pygame.QUIT):
+            pygame.quit()
+            sys.exit()
+        pygame.time.wait(min(16, max(1, fin - pygame.time.get_ticks())))
+
+def texte_adapte(text, font, color):
+    surface = font.render(text, True, color)
+    if surface.get_width() > WIDTH - 40:
+        ratio = (WIDTH - 40) / surface.get_width()
+        surface = pygame.transform.smoothscale(surface, (WIDTH - 40, max(1, int(surface.get_height() * ratio))))
+    return surface
+
 # Initialisation de Pygame
 pygame.init()
 
-
-
-
 #Permet de lancer la musique
-pygame.mixer.init()
-pygame.mixer.music.load(asset("welcome-to-arena-sport-hip-hop-207257.mp3"))
-pygame.mixer.music.set_volume(0.5)
-
-
+audio_disponible = True
+try:
+    pygame.mixer.init()
+    pygame.mixer.music.load(asset("welcome-to-arena-sport-hip-hop-207257.mp3"))
+    pygame.mixer.music.set_volume(0.5)
+except pygame.error:
+    audio_disponible = False
+    print("Audio indisponible : le jeu continue sans musique.")
 
 background_menu = pygame.image.load(asset("cartoon-background-of-street-basketball-vector-22899763.jpg"))
 background_menu = pygame.transform.scale(background_menu, (800, 600))
@@ -28,24 +45,20 @@ background_menu = pygame.transform.scale(background_menu, (800, 600))
 background_game = pygame.image.load(asset("background_projet-transversre-Copie.jpg"))  
 background_game = pygame.transform.scale(background_game, (800, 600))
 
-
 #Permet de charger la police
 orbitron_big = pygame.font.Font(asset("Orbitron.ttf"), 70)
 orbitron_medium = pygame.font.Font(asset("Orbitron.ttf"), 40)
 orbitron_small = pygame.font.Font(asset("Orbitron.ttf"), 30)
-
 
 difficulty="Facile"
 
 WIDTH, HEIGHT = 800, 600
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 
-
-ball_image = pygame.image.load(asset("0pw3xgm2-modified.jpg")).convert_alpha()
+ball_image = pygame.image.load(asset("0pw3xgm2-modified.png")).convert_alpha()
 basket_image = pygame.image.load(asset("79qqv6dt.jpg")).convert_alpha()
 
-
-ball_image = pygame.transform.scale(ball_image, (40, 40))
+ball_image = pygame.transform.smoothscale(ball_image, (50, 50))
 basket_image = pygame.transform.scale(basket_image, (80, 60))
 
 # Couleurs
@@ -62,7 +75,6 @@ BLEU = (0, 0, 255)
 FONT_SIZE = 50
 FPS = 60
 
-
 # Polices
 font_large = pygame.font.SysFont("Arial", FONT_SIZE, bold=True)
 font_small = pygame.font.SysFont("Arial", 30)
@@ -77,14 +89,10 @@ HOOP_WIDTH = 100      # Largeur du panier
 HOOP_HEIGHT = 20      # Hauteur du panier
 HOOP_SPEED = 5
 
-
 # Dimensions de la fenêtre
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Basket Game - Menu")
-
-
-
 
 font_path = asset("STREET.ttf")  
 font = pygame.font.Font(font_path, 50)  
@@ -124,6 +132,9 @@ def entrer_noms():
     while not done:
         screen.fill(BLANC)
         screen.blit(background_menu, (0, 0))
+
+        pygame.draw.rect(screen, BLANC, input_box1)
+        pygame.draw.rect(screen, BLANC, input_box2)
 
         # Affichage des champs
         text_surface1 = font_small.render(f"Joueur 1 : {player1_name}", True, NOIR)
@@ -190,12 +201,10 @@ def animation_titre_progressif():
         color = VERT if i % 2 == 0 else BLANC  
         zoom_factor = 1 + (i * 0.1)  
 
-        
         title_surface = font.render(displayed, True, color)
         scaled_surface = pygame.transform.scale(title_surface, (
             int(title_surface.get_width() * zoom_factor), int(title_surface.get_height() * zoom_factor)))
 
-        
         x_pos = WIDTH // 2 - scaled_surface.get_width() // 2
         y_pos = HEIGHT // 2 - scaled_surface.get_height() // 2
 
@@ -203,16 +212,15 @@ def animation_titre_progressif():
         screen.blit(scaled_surface, (x_pos, y_pos))
         pygame.display.flip()
 
-        pygame.time.delay(200)  
+        attendre(200)  
         clock.tick(60)
 
-
-    pygame.time.delay(1000)
-
+    attendre(1000)
 
     transition()
 
-    pygame.mixer.music.play(-1)
+    if audio_disponible:
+        pygame.mixer.music.play(-1)
 
 #transition après l affichage du titre,des carrés s affichent aléatoirement avant d'afficher le menu
 def transition():
@@ -235,9 +243,8 @@ def transition():
         screen.fill(NOIR)
         pygame.draw.rect(screen, BLANC, square)  # Dessiner chaque carré en blanc
         pygame.display.flip()
-        pygame.time.delay(10)  # Lente transition
-        pygame.time.delay(10)  
-
+        attendre(10)  # Lente transition
+        attendre(10)  
 
 #Lorsque la souris passe au dessus d'un bouton, celui si apparait de manière plus claire
 def bouton(text, rect, is_hovered, font):
@@ -252,7 +259,6 @@ def bouton(text, rect, is_hovered, font):
     text_rect = text_surface.get_rect(center=rect.center)
     screen.blit(text_surface, text_rect)
 
-
 #Afficage d'un ballon avant ajout de l'image
 def ballon(x, y):
     pygame.draw.circle(WIN, ORANGE, (int(x), int(y)), BALL_RADIUS)
@@ -260,7 +266,6 @@ def ballon(x, y):
 #Affichage du panier avant ajout de l'image
 def panier():
     pygame.draw.rect(screen, (255, 0, 0), (HOOP_X, HOOP_Y, HOOP_WIDTH, HOOP_HEIGHT))
-
 
 #Permet d'ajuster la taille du panier en fonction de la difficulté choisis
 def ajuster_taille_panier():
@@ -302,11 +307,11 @@ def options_menu():
         screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 50))
 
         # Volume
-        music_text = orbitron_small.render("Volume Musique :", True, BLANC)
+        music_text = orbitron_small.render("Volume Musique :" if audio_disponible else "Son indisponible", True, BLANC)
         screen.blit(music_text, (100, 150))
 
         pygame.draw.rect(screen, BLANC, volume_slider)
-        volume = pygame.mixer.music.get_volume()
+        volume = pygame.mixer.music.get_volume() if audio_disponible else 0.0
         pygame.draw.rect(screen, VERT, (volume_slider.x, volume_slider.y, int(volume * volume_slider.width), volume_slider.height))
         handle_x = volume_slider.x + int(volume * volume_slider.width)
         pygame.draw.circle(screen, NOIR, (handle_x, volume_slider.y + volume_slider.height // 2), 10)
@@ -354,13 +359,11 @@ def options_menu():
                 rel_x = event.pos[0] - volume_slider.x
                 rel_x = max(0, min(rel_x, volume_slider.width))
                 new_volume = rel_x / volume_slider.width
-                pygame.mixer.music.set_volume(new_volume)
+                if audio_disponible:
+                    pygame.mixer.music.set_volume(new_volume)
 
         pygame.display.flip()
-        pygame.time.delay(30)
-
-
-
+        attendre(30)
 
 #Permet d'afficher du texte à une position précise sur l'écran
 def dessin_texte(text, font, color, surface, x, y):
@@ -371,10 +374,9 @@ def dessin_texte(text, font, color, surface, x, y):
 #Permet de lancer le jeu en 3 manches où chaque joueur joue à tour de rôle
 #Permet d'afficher du texte centré et à une certaine hauteur
 def dessin_texte_centre(text, font, color, y):
-    rendered = font.render(text, True, color)
+    rendered = texte_adapte(text, font, color)
     rect = rendered.get_rect(center=(WIDTH // 2, y))
     screen.blit(rendered, rect)
-
 
 #permet d'ajouter une animation être chaque manche avec un compteur
 def round(round_number, player_name):
@@ -385,9 +387,8 @@ def round(round_number, player_name):
     background = pygame.image.load(asset("image_manche.jpg"))  
     background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
-    
     message = f"Manche {round_number} - {player_name}"
-    text = orbitron_big.render(message, True, (255, 215, 0))  # Doré
+    text = texte_adapte(message, orbitron_big, (255, 215, 0))  # Doré
     text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 100))
 
     for alpha in range(0, 256, 10):
@@ -395,9 +396,8 @@ def round(round_number, player_name):
         text.set_alpha(alpha)
         screen.blit(text, text_rect)
         pygame.display.flip()
-        pygame.time.delay(30)
+        attendre(30)
 
-    
     for count in ["3", "2", "1", "GO!"]:
         countdown_text = orbitron_countdown.render(count, True, (255, 215, 0))
         countdown_rect = countdown_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 50))
@@ -408,25 +408,23 @@ def round(round_number, player_name):
             countdown_text.set_alpha(alpha)
             screen.blit(countdown_text, countdown_rect)
             pygame.display.flip()
-            pygame.time.delay(20)
+            attendre(20)
 
-        pygame.time.delay(300)  
+        attendre(300)  
 
-    pygame.time.delay(300) 
-
-
-
+    attendre(300) 
 
 #Affiche un écran à la fin du jeu
 def ecran_de_fin(player1, player2, score1, score2):
     
     background_img = pygame.image.load(asset("image_victoire.jpg")).convert()
-    background_img = pygame.transform.scale(background_img, (ecran_hauteur, ecran_largeur))
+    background_img = pygame.transform.scale(background_img, (WIDTH, HEIGHT))
 
-    
     screen.blit(background_img, (0, 0))
+    voile = pygame.Surface((WIDTH, HEIGHT), pygame.SRCALPHA)
+    voile.fill((0, 0, 0, 125))
+    screen.blit(voile, (0, 0))
 
-    
     dessin_texte_centre("Fin du Jeu", orbitron_big, BLANC, 80)
     dessin_texte_centre(f"{player1}: {score1} pts", orbitron_medium, VERT, 200)
     dessin_texte_centre(f"{player2}: {score2} pts", orbitron_medium, VERT, 260)
@@ -452,8 +450,6 @@ def ecran_de_fin(player1, player2, score1, score2):
                 waiting = False
         clock.tick(60)
 
-
-
 #Permet de retourner une valeur numérique en fonction du choix de la difficulté
 def choix_difficulté():
     if difficulty == "easy":
@@ -467,28 +463,23 @@ difficulty= "Facile" #par défaut
 orbitron_font_small = pygame.font.Font(asset("Orbitron.ttf"), 30)
 orbitron_font_large = pygame.font.Font(asset("Orbitron.ttf"), 72)
 
-
 #Permet de lancer le jeu et d'y jouer
 def jeu(player_name, round_number, difficulty):
     
     round(round_number, player_name)
 
-    
-    time.sleep(1)
-    
-    
+    attendre(1000)
+
     gravity = 0.4
     launched = False
     velocity = [0, 0]
     aiming = False
     aim_start = (0, 0)
 
-    
     if difficulty == "Difficile":
         ball = pygame.Rect(random.randint(300, 450), 500, 50, 50)
     else:
         ball = pygame.Rect(370, 500, 50, 50)
-
 
     if difficulty == "Facile":
         hoop_zone = pygame.Rect(350, 100, 100, 20)
@@ -501,14 +492,15 @@ def jeu(player_name, round_number, difficulty):
     else:
         hoop_zone = pygame.Rect(350, 100, 100, 20)
 
+    hoop_sprite = pygame.transform.scale(basket_image, (hoop_zone.width, basket_image.get_height()))
+
     paused = False
     pause_start = 0
     total_pause_duration = 0
-    start_time = time.time()
+    start_time = time.monotonic()
     score = 0  
 
-    
-    while paused or time.time() - start_time - total_pause_duration < 30:
+    while paused or time.monotonic() - start_time - total_pause_duration < 30:
         screen.blit(background_game, (0, 0))
 
         for event in pygame.event.get():
@@ -519,9 +511,10 @@ def jeu(player_name, round_number, difficulty):
                 if event.key == pygame.K_p:
                     paused = not paused
                     if paused:
-                        pause_start = time.time()
+                        aiming = False
+                        pause_start = time.monotonic()
                     else:
-                        total_pause_duration += time.time() - pause_start
+                        total_pause_duration += time.monotonic() - pause_start
             if not paused:
                 if event.type == pygame.MOUSEBUTTONDOWN and not launched:
                     aiming = True
@@ -555,14 +548,12 @@ def jeu(player_name, round_number, difficulty):
                 if hoop_zone.left <= 0 or hoop_zone.right >= WIDTH:
                     direction *= -1
 
-            
-            screen.blit(basket_image, (hoop_zone.x, hoop_zone.y))
+            screen.blit(hoop_sprite, (hoop_zone.x, hoop_zone.y))
             screen.blit(ball_image, (ball.x, ball.y))
 
-            elapsed = time.time() - start_time - total_pause_duration
+            elapsed = time.monotonic() - start_time - total_pause_duration
             remaining = max(0, int(30 - elapsed))
 
-        
             timer_text = orbitron_font_small.render(f"Temps: {remaining}s", True, BLANC)
             score_text = orbitron_font_small.render(f"{player_name} Score: {score}", True, VERT)
             screen.blit(timer_text, (10, 10))
@@ -577,7 +568,6 @@ def jeu(player_name, round_number, difficulty):
 
     return score
 
-
 def commencer_la_partie(player1, player2, difficulty):
     total1 = 0
     total2 = 0
@@ -588,7 +578,6 @@ def commencer_la_partie(player1, player2, difficulty):
 
     ecran_de_fin(player1, player2, total1, total2)
 
-
 #Affiche un écran avec les scores dessus
 def graphique_des_scores(scores1, scores2, player1_name, player2_name):
     bar_width = 100
@@ -596,7 +585,6 @@ def graphique_des_scores(scores1, scores2, player1_name, player2_name):
     max_score = max(max(scores1), max(scores2), 1)  
     screen.fill((0, 0, 0))
 
-    
     title = orbitron_big.render("Résumé des scores", True, VERT)
     screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 30))
 
@@ -606,15 +594,12 @@ def graphique_des_scores(scores1, scores2, player1_name, player2_name):
         bar1 = pygame.Rect(150 + i * (bar_width + spacing), 400 - h1, bar_width, h1)
         pygame.draw.rect(screen, VERT, bar1)
 
-        
         h2 = int((scores2[i] / max_score) * 200)
         bar2 = pygame.Rect(150 + i * (bar_width + spacing) + bar_width // 2, 400 - h2, bar_width, h2)
         pygame.draw.rect(screen, (255, 100, 100), bar2)
 
-    
         label = orbitron_small.render(f"Manche {i + 1}", True, BLANC)
         screen.blit(label, (bar1.x + 10, 420))
-
 
     legend1 = orbitron_small.render(player1_name, True, VERT)
     legend2 = orbitron_small.render(player2_name, True, (255, 100, 100))
@@ -622,24 +607,17 @@ def graphique_des_scores(scores1, scores2, player1_name, player2_name):
     screen.blit(legend2, (WIDTH // 2 + 50, 500))
 
     pygame.display.flip()
-    pygame.time.delay(5000)
-
-
-
-
+    attendre(5000)
 
 difficulty = "Facile"
-
 
 #Permet d'afficher le menu principal du jeu à l'écran, avec le titre et les boutons
 def menu():
     screen.blit(background_menu, (0, 0))  
 
-    
     title = orbitron_big.render("Green Ball", True, VERT)
     screen.blit(title, (WIDTH // 2 - title.get_width() // 2, 100))
 
-    
     for text, rect in buttons.items():
         mouse_x, mouse_y = pygame.mouse.get_pos()
         is_hovered = rect.collidepoint(mouse_x, mouse_y)
@@ -676,13 +654,7 @@ def main():
                     sys.exit()
 
         menu()
-        pygame.time.delay(30)
-
-
-
-
-
-
+        attendre(30)
 
 if __name__ == "__main__":
     main()
