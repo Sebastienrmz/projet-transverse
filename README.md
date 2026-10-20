@@ -2,6 +2,14 @@
 
 Jeu de basket en 2D réalisé en équipe avec Python et Pygame. Deux joueurs jouent à tour de rôle pendant trois manches. Chaque passage dure 30 secondes ; le but est de marquer le plus de paniers.
 
+## Aperçu
+
+Captures du jeu avec les ressources du projet : le menu, puis une manche. Les noms et le score sont des données de démonstration.
+
+![Menu de Green Ball](docs/captures/menu.png)
+
+![Une manche de Green Ball](docs/captures/manche.png)
+
 ## Installation
 
 Installer Python 3.10 ou plus récent, puis ouvrir un terminal dans le dossier du jeu :
