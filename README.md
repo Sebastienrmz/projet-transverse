@@ -1,5 +1,13 @@
 # Green Ball
 
+## Essayer rapidement sous Windows
+
+**[Télécharger la version Windows](https://github.com/Sebastienrmz/projet-transverse/releases/latest)**
+
+Télécharger le fichier **Green-Ball-Windows.zip** dans la rubrique **Assets**, faire **Extraire tout**, puis double-cliquer sur **Tester.bat**. Le programme et ses ressources sont fournis ensemble : aucun chemin à configurer.
+
+Python et Pygame sont inclus dans cette version. Les instructions ci-dessous permettent aussi de lancer et modifier les sources.
+
 Jeu de basket en 2D réalisé en équipe avec Python et Pygame. Deux joueurs jouent à tour de rôle pendant trois manches. Chaque passage dure 30 secondes ; le but est de marquer le plus de paniers.
 
 ## Aperçu

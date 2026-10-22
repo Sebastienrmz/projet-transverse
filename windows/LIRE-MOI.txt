@@ -1,0 +1,12 @@
+VERSION WINDOWS 64 BITS
+
+1. Extraire entierement le fichier ZIP (clic droit > Extraire tout).
+2. Ouvrir le dossier extrait.
+3. Double-cliquer sur Tester.bat.
+
+Cliquer sur Jouer et saisir les noms. Maintenir le bouton de la souris,
+deplacer puis relacher pour tirer. P : pause. Options : volume et difficulte.
+Aucune installation de Python ni de Pygame n’est necessaire.
+
+Le code et les credits de l’equipe sont dans README.md et sur GitHub :
+https://github.com/Sebastienrmz/projet-transverse
