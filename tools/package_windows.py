@@ -3,6 +3,7 @@ from pathlib import Path
 import argparse
 import shutil
 import subprocess
+import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,7 +15,7 @@ name = names[args.kind]
 stage = ROOT / 'build' / 'windows-package' / name
 stage.mkdir(parents=True, exist_ok=True)
 if args.kind == 'game':
-    subprocess.run(['python', '-m', 'PyInstaller', '--noconfirm', '--clean', '--onedir',
+    subprocess.run([sys.executable, '-m', 'PyInstaller', '--noconfirm', '--clean', '--onedir',
                     '--console', '--name', 'GreenBall', '--add-data', 'assets:assets', 'main.py'], cwd=ROOT, check=True)
     shutil.copytree(ROOT/'dist/GreenBall', stage/'GreenBall', dirs_exist_ok=True)
 else:
